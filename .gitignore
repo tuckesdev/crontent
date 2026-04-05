@@ -1,0 +1,62 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# superpowers brainstorm
+.superpowers/
+
+# crontent output (temp files, rendered assets, job data)
+/output/
+/public/assets/render/
+/public/uploads/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+.firecrawl/
+
+# playwright-mcp debug artifacts (screenshots, console logs, snapshots)
+.playwright-mcp/
+
+# supabase CLI local state
+supabase/.temp/
+supabase/.branches/
+
+# research artifacts (research screenshots, firecrawl dumps)
+*.png
+!public/**/*.png
+!src/**/*.png
