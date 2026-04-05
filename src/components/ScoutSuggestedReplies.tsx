@@ -8,8 +8,9 @@
  * questions. User can click a suggestion or type freeform.
  */
 
-// Multiline flag matches `^suggested:` at start of ANY line
-const SUGGESTED_RE = /^[ \t]*suggested:[ \t]*(.+)$/im;
+// Matches `suggested:` anywhere — word boundary prevents false positives
+// like "you suggested earlier". Captures until newline or end of string.
+const SUGGESTED_RE = /\bsuggested:\s*([^\n]+)/i;
 
 export function extractSuggestions(text: string): {
   cleanText: string;
@@ -21,11 +22,14 @@ export function extractSuggestions(text: string): {
   const raw = match[1].trim();
   const suggestions = raw
     .split("|")
-    .map((s) => s.trim().replace(/^["']|["']$/g, ""))
+    .map((s) => s.trim().replace(/^["']|["']$/g, "").replace(/[.!?]+$/, ""))
     .filter(Boolean);
 
-  // Strip the suggested line + any surrounding blank lines
-  const cleanText = text.replace(SUGGESTED_RE, "").replace(/\n{3,}/g, "\n\n").trim();
+  // Strip the matched suggested line + collapse whitespace
+  const cleanText = text
+    .replace(SUGGESTED_RE, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
   return { cleanText, suggestions };
 }
 
