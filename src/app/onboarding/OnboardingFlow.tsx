@@ -5,6 +5,11 @@ import { useRouter } from "next/navigation";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { Telescope, Send, CircleCheck } from "lucide-react";
+import { ScoutMarkdown } from "@/components/ScoutMarkdown";
+import {
+  extractSuggestions,
+  SuggestedReplies,
+} from "@/components/ScoutSuggestedReplies";
 
 export function OnboardingFlow() {
   const router = useRouter();
@@ -129,7 +134,9 @@ export function OnboardingFlow() {
         ref={scrollRef}
         className="flex-1 rounded-lg border border-white/10 bg-black/60 p-5 font-mono text-[13px] leading-relaxed overflow-y-auto max-h-[55vh] space-y-3"
       >
-        {messages.map((message) => (
+        {messages.map((message, msgIdx) => {
+          const isLastMessage = msgIdx === messages.length - 1;
+          return (
           <div key={message.id} className="animate-agent-msg-in">
             {message.parts.map((part, i) => {
               if (part.type === "text") {
@@ -143,14 +150,23 @@ export function OnboardingFlow() {
                     </div>
                   );
                 }
+                // Scout's text — render markdown + extract suggestions
+                const { cleanText, suggestions } = extractSuggestions(part.text);
                 return (
                   <div key={i} className="flex gap-2">
                     <span className="text-cyan-400 shrink-0 select-none">
                       scout &gt;
                     </span>
-                    <span className="text-white/90 whitespace-pre-wrap">
-                      {part.text}
-                    </span>
+                    <div className="text-white/90 flex-1 min-w-0">
+                      <ScoutMarkdown content={cleanText} />
+                      {isLastMessage && suggestions.length > 0 && (
+                        <SuggestedReplies
+                          suggestions={suggestions}
+                          disabled={isThinking}
+                          onPick={(v) => sendMessage({ text: v })}
+                        />
+                      )}
+                    </div>
                   </div>
                 );
               }
@@ -207,7 +223,8 @@ export function OnboardingFlow() {
               return null;
             })}
           </div>
-        ))}
+          );
+        })}
         {isThinking && (
           <div className="flex gap-2 text-white/40 italic">
             <span className="text-cyan-400 shrink-0 select-none">scout &gt;</span>
