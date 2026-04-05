@@ -8,7 +8,8 @@
  * questions. User can click a suggestion or type freeform.
  */
 
-const SUGGESTED_RE = /(?:^|\n)\s*suggested:\s*(.+?)(?:\n|$)/i;
+// Multiline flag matches `^suggested:` at start of ANY line
+const SUGGESTED_RE = /^[ \t]*suggested:[ \t]*(.+)$/im;
 
 export function extractSuggestions(text: string): {
   cleanText: string;
@@ -23,7 +24,8 @@ export function extractSuggestions(text: string): {
     .map((s) => s.trim().replace(/^["']|["']$/g, ""))
     .filter(Boolean);
 
-  const cleanText = text.replace(SUGGESTED_RE, "").trim();
+  // Strip the suggested line + any surrounding blank lines
+  const cleanText = text.replace(SUGGESTED_RE, "").replace(/\n{3,}/g, "\n\n").trim();
   return { cleanText, suggestions };
 }
 
@@ -39,15 +41,21 @@ export function SuggestedReplies({
   if (suggestions.length === 0) return null;
 
   return (
-    <div className="mt-2.5 flex flex-wrap gap-2">
+    <div className="mt-4 flex flex-col gap-1.5 max-w-md">
+      <div className="font-mono text-[10px] uppercase tracking-wider text-white/30 mb-1">
+        pick one, or type your own →
+      </div>
       {suggestions.map((s, i) => (
         <button
           key={i}
           onClick={() => onPick(s)}
           disabled={disabled}
-          className="rounded-md border border-cyan-400/30 bg-cyan-400/5 px-2.5 py-1 font-mono text-[11px] text-cyan-400 hover:bg-cyan-400/15 hover:border-cyan-400/60 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="group text-left rounded-md border border-white/15 bg-white/[0.03] px-4 py-2.5 font-mono text-[13px] text-white/80 hover:border-cyan-400/60 hover:bg-cyan-400/[0.08] hover:text-cyan-300 active:scale-[0.99] disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-between"
         >
-          {s}
+          <span>{s}</span>
+          <span className="text-white/20 group-hover:text-cyan-400/60 transition-colors text-[11px]">
+            ⏎
+          </span>
         </button>
       ))}
     </div>
