@@ -8,9 +8,9 @@
  * questions. User can click a suggestion or type freeform.
  */
 
-// Matches `suggested:` anywhere — word boundary prevents false positives
-// like "you suggested earlier". Captures until newline or end of string.
-const SUGGESTED_RE = /\bsuggested:\s*([^\n]+)/i;
+// Matches `suggested:` anywhere. Captures until newline/backtick.
+// Leading/trailing backticks + code-fence markers are swallowed into the match.
+const SUGGESTED_RE = /`*\s*\bsuggested:\s*([^\n`]+)`*/i;
 
 export function extractSuggestions(text: string): {
   cleanText: string;
@@ -22,12 +22,18 @@ export function extractSuggestions(text: string): {
   const raw = match[1].trim();
   const suggestions = raw
     .split("|")
-    .map((s) => s.trim().replace(/^["']|["']$/g, "").replace(/[.!?]+$/, ""))
+    .map((s) =>
+      s
+        .trim()
+        .replace(/^[`"']+|[`"']+$/g, "") // strip surrounding quotes/backticks
+        .replace(/[.!?`]+$/, ""), // strip trailing punctuation
+    )
     .filter(Boolean);
 
-  // Strip the matched suggested line + collapse whitespace
+  // Strip the matched suggested line + any orphan code fences + collapse whitespace
   const cleanText = text
     .replace(SUGGESTED_RE, "")
+    .replace(/^[ \t]*`+[ \t]*$/gm, "") // remove stray backtick-only lines
     .replace(/\n{3,}/g, "\n\n")
     .trim();
   return { cleanText, suggestions };
