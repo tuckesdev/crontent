@@ -7,7 +7,7 @@ icon: Clapperboard
 color: text-violet-400
 hex: "#a78bfa"
 glyph: "▶"
-model: claude-sonnet-4-6
+model: claude-sonnet-4.6
 ---
 
 # Director

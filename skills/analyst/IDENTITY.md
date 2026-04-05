@@ -7,7 +7,7 @@ icon: LineChart
 color: text-rose-400
 hex: "#fb7185"
 glyph: "△"
-model: claude-sonnet-4-6
+model: claude-sonnet-4.6
 ---
 
 # Analyst

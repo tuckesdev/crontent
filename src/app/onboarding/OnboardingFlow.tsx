@@ -12,8 +12,11 @@ export function OnboardingFlow() {
   const [phase, setPhase] = useState<"intake" | "chat">("intake");
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { messages, sendMessage, status } = useChat({
+  const { messages, sendMessage, status, error } = useChat({
     transport: new DefaultChatTransport({ api: "/api/crew/scout" }),
+    onError: (err) => {
+      console.error("[OnboardingFlow] chat error:", err);
+    },
     onFinish: ({ message }) => {
       // Detect saveBrandProfile success → redirect
       for (const part of message.parts) {
@@ -213,6 +216,14 @@ export function OnboardingFlow() {
               <span className="animate-pulse" style={{ animationDelay: "0.2s" }}>.</span>
               <span className="animate-pulse" style={{ animationDelay: "0.4s" }}>.</span>
               <span className="animate-pulse" style={{ animationDelay: "0.6s" }}>.</span>
+            </span>
+          </div>
+        )}
+        {error && (
+          <div className="flex gap-2 text-red-400">
+            <span className="shrink-0 select-none">error &gt;</span>
+            <span className="whitespace-pre-wrap break-words">
+              {error.message || "something broke. check server logs."}
             </span>
           </div>
         )}

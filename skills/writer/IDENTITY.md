@@ -7,7 +7,7 @@ icon: PenLine
 color: text-amber-400
 hex: "#fbbf24"
 glyph: "¶"
-model: claude-opus-4-6
+model: claude-opus-4.6
 ---
 
 # Writer

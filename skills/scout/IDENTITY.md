@@ -7,7 +7,7 @@ icon: Telescope
 color: text-cyan-400
 hex: "#22d3ee"
 glyph: "◎"
-model: claude-sonnet-4-6
+model: claude-sonnet-4.6
 ---
 
 # Scout

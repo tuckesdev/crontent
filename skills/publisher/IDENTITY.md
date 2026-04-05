@@ -7,7 +7,7 @@ icon: Send
 color: text-emerald-400
 hex: "#34d399"
 glyph: "↗"
-model: claude-haiku-4-5
+model: claude-haiku-4.5
 ---
 
 # Publisher

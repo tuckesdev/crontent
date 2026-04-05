@@ -3,7 +3,7 @@ crew: crontent
 agent: writer
 name: Writer
 role: copy
-model: claude-opus-4-6
+model: claude-opus-4.6
 ---
 
 # Writer — Who You Are

@@ -3,7 +3,7 @@ crew: crontent
 agent: pilot
 name: Pilot
 role: crew-lead
-model: claude-sonnet-4-6
+model: claude-sonnet-4.6
 ---
 
 # Pilot — Who You Are

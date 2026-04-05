@@ -3,7 +3,7 @@ crew: crontent
 agent: director
 name: Director
 role: video-production
-model: claude-sonnet-4-6
+model: claude-sonnet-4.6
 ---
 
 # Director — Who You Are

@@ -3,7 +3,7 @@ crew: crontent
 agent: publisher
 name: Publisher
 role: distribution
-model: claude-haiku-4-5
+model: claude-haiku-4.5
 ---
 
 # Publisher — Who You Are

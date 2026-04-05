@@ -3,7 +3,7 @@ crew: crontent
 agent: analyst
 name: Analyst
 role: metrics-learning
-model: claude-sonnet-4-6
+model: claude-sonnet-4.6
 ---
 
 # Analyst — Who You Are
