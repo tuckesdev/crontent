@@ -11,6 +11,7 @@
 import type { NextRequest } from "next/server";
 import type { UIMessage } from "ai";
 import { createClient } from "@/lib/supabase/server";
+import { isAllowed } from "@/lib/allowlist";
 import { streamScoutChat } from "@/crew/scout";
 
 export const maxDuration = 60;
@@ -26,6 +27,11 @@ export async function POST(req: NextRequest) {
 
     if (!user) {
       return new Response("Unauthorized", { status: 401 });
+    }
+
+    // Private beta gate
+    if (!isAllowed(user.email)) {
+      return new Response("Beta access required", { status: 403 });
     }
 
     // Parse request body

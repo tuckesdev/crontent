@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { isAllowed } from "@/lib/allowlist";
 import { OnboardingFlow } from "./OnboardingFlow";
 
 export default async function OnboardingPage() {
@@ -11,6 +12,10 @@ export default async function OnboardingPage() {
 
   if (!user) {
     redirect("/auth/signin?next=/onboarding");
+  }
+
+  if (!isAllowed(user.email)) {
+    redirect("/?beta=gated");
   }
 
   return (

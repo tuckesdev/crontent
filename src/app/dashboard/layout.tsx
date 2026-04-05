@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ShipWheel } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { isAllowed } from "@/lib/allowlist";
 import { UserMenu } from "@/components/auth/UserMenu";
 
 export default async function DashboardLayout({
@@ -16,6 +17,11 @@ export default async function DashboardLayout({
 
   if (!user) {
     redirect("/auth/signin?next=/dashboard");
+  }
+
+  // Private beta: only allowlisted emails reach the dashboard
+  if (!isAllowed(user.email)) {
+    redirect("/?beta=gated");
   }
 
   return (
